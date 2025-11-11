@@ -13,7 +13,8 @@ export default function SignupStudent() {
     };
     const res = await api.post("/auth/signup", payload);
     localStorage.setItem("token", res.data.token);
-    router.push("/(student)/dashboard");
+    localStorage.setItem("user", JSON.stringify(res.data.user));
+    router.push("/student/dashboard");
   };
   return <div className="container"><MultiStepForm role="student" onSubmit={submit} /></div>;
 }

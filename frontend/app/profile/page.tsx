@@ -11,9 +11,13 @@ export default function ProfilePage() {
   useEffect(() => {
     const tok = localStorage.getItem("token");
     if (tok) setAuth(tok);
-    (async () => {
+
+    // Read user from localStorage
+    const userStr = localStorage.getItem("user");
+    
+    if (userStr) {
       try {
-        const { data } = await api.get("/auth/me");
+        const data = JSON.parse(userStr);
         setUser(data);
         setForm({
           name: data.name || "",
@@ -28,12 +32,15 @@ export default function ProfilePage() {
           interests: (data.interests || []).join(", "),
           expertiseSubjects: (data.expertiseSubjects || []).join(", ")
         });
-      } catch {
-        // Silent; page will still render edit form
+      } catch (e) {
+        console.error("Failed to parse user from localStorage", e);
       } finally {
         setLoading(false);
       }
-    })();
+    } else {
+      setLoading(false);
+      // Maybe redirect to login if no user
+    }
   }, []);
 
   const save = async () => {
@@ -51,6 +58,7 @@ export default function ProfilePage() {
     const { data } = await api.put("/auth/profile", parsed.data);
     setUser(data);
     alert("Profile updated");
+    
   };
 
   if (loading) return <div className="container">Loading...</div>;

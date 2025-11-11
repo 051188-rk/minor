@@ -13,7 +13,8 @@ export default function SignupEvaluator() {
     };
     const res = await api.post("/auth/signup", payload);
     localStorage.setItem("token", res.data.token);
-    router.push("/(evaluator)/dashboard");
+    localStorage.setItem("user", JSON.stringify(res.data.user));
+    router.push("/evaluator/dashboard");
   };
   return <div className="container"><MultiStepForm role="evaluator" onSubmit={submit} /></div>;
 }

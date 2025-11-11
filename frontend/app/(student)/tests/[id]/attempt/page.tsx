@@ -12,17 +12,31 @@ export default function AttemptPage() {
   useEffect(() => {
     const tok = localStorage.getItem("token");
     if (tok) setAuth(tok);
-    (async () => {
-      const t = await api.get(`/student/tests/${id}`); // create a simple pass-through route or reuse state
-      // For simplicity, fetch via DB by id if you add that route; otherwise pre-store in state after creation.
-      setTest(t.data);
-    })();
-  }, [id]);
+
+    // Read test data from localStorage instead of fetching
+    const savedTest = localStorage.getItem(`test-${id}`);
+    if (savedTest) {
+      setTest(JSON.parse(savedTest));
+    } else {
+      // Handle case where test data isn't found
+      alert("Test data not found. Redirecting to dashboard.");
+      router.push("/(student)/dashboard");
+    }
+  }, [id, router]);
 
   const submit = async (answers: any[]) => {
-    const res = await api.post(`/student/tests/${id}/submit`, { answers });
-    alert(`Score: ${res.data.score}/${res.data.total}`);
-    router.push("/(student)/dashboard");
+    try {
+      const res = await api.post(`/student/tests/${id}/submit`, { answers });
+      alert(`Score: ${res.data.score}/${res.data.total}`);
+      
+      // Clean up localStorage after submission
+      localStorage.removeItem(`test-${id}`);
+      
+      router.push("/(student)/dashboard");
+    } catch (error) {
+      console.error("Failed to submit test", error);
+      alert("Failed to submit test.");
+    }
   };
 
   if (!test) return <div className="container">Loading...</div>;

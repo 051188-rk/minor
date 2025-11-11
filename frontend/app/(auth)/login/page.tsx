@@ -7,13 +7,24 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  
   const login = async () => {
-    const { data } = await api.post("/auth/login", { email, password });
-    localStorage.setItem("token", data.token);
-    setAuth(data.token);
-    if (data.user.role === "student") router.push("/(student)/dashboard");
-    else router.push("/(evaluator)/dashboard");
+    try {
+      const { data } = await api.post("/auth/login", { email, password });
+      localStorage.setItem("token", data.token);
+      
+      // Save the user object to localStorage
+      localStorage.setItem("user", JSON.stringify(data.user)); 
+      
+      setAuth(data.token);
+      if (data.user.role === "student") router.push("/student/dashboard");
+      else router.push("/evaluator/dashboard");
+    } catch (error) {
+      console.error("Login failed", error);
+      alert("Invalid credentials.");
+    }
   };
+  
   return (
     <div className="container">
       <div className="card">

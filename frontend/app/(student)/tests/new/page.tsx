@@ -19,8 +19,18 @@ export default function StudentNewTest() {
       alert(parsed.error.errors.map(e => e.message).join("\n"));
       return;
     }
-    const { data } = await api.post("/student/tests", parsed.data);
-    router.push(`/(student)/tests/${data._id}/attempt`);
+    
+    try {
+      const { data } = await api.post("/student/tests", parsed.data);
+      
+      // Save the newly created test to localStorage
+      localStorage.setItem(`test-${data._id}`, JSON.stringify(data));
+      
+      router.push(`/(student)/tests/${data._id}/attempt`);
+    } catch (error) {
+      console.error("Failed to create test", error);
+      alert("Failed to create test.");
+    }
   };
 
   return (

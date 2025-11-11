@@ -1,34 +1,39 @@
 "use client";
 import { useEffect, useState } from "react";
 import api, { setAuth } from "@/lib/api";
-import StudentTestForm from "@/components/StudentTestForm";
-import Link from "next/link";
+import ResultCard from "@/components/ResultCard"; // Import ResultCard
 
 export default function StudentDashboard() {
-  const [tests, setTests] = useState<any[]>([]);
+  const [results, setResults] = useState<any[]>([]); // State for results
+  
   useEffect(() => {
     const tok = localStorage.getItem("token");
     if (tok) setAuth(tok);
+    
+    // Fetch past results
+    (async () => {
+      try {
+        const { data } = await api.get("/student/results");
+        setResults(data);
+      } catch (error) {
+        console.error("Failed to fetch results", error);
+      }
+    })();
   }, []);
-
-  const create = async (payload: any) => {
-    const res = await api.post("/student/tests", payload);
-    setTests([res.data, ...tests]);
-  };
 
   return (
     <div className="container">
-      <StudentTestForm onCreate={create} />
+      <h2>My Results</h2>
       <div className="grid" style={{ marginTop: "1rem" }}>
-        {tests.map(t => (
-          <div key={t._id} className="card" style={{ gridColumn: "span 6" }}>
-            <h4>{t.topic} <span className="badge">{t.difficulty}</span></h4>
-            <div>{t.numQuestions} questions • {t.durationMinutes} min</div>
-            <div style={{ marginTop: "0.5rem" }}>
-              <Link href={`/ (student)/tests/${t._id}/attempt`} className="button">Attempt</Link>
+        {results.length > 0 ? (
+          results.map(r => (
+            <div key={r._id} style={{ gridColumn: "span 6" }}>
+              <ResultCard result={r} />
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p>You have not attempted any tests yet.</p>
+        )}
       </div>
     </div>
   );

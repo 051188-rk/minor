@@ -30,14 +30,14 @@ export default function Sidebar({ role }: { role: "student" | "evaluator" }) {
 
   return (
     <aside style={{ width: 260, display: "flex", flexDirection: "column", gap: "0.6rem" }}>
-      <Item href={role === "student" ? "/(student)/dashboard" : "/(evaluator)/dashboard"} label="Dashboard" Icon={FaTachometerAlt} />
+      <Item href={role === "student" ? "/student/dashboard" : "/evaluator/dashboard"} label="Dashboard" Icon={FaTachometerAlt} />
       {role === "student" ? (
-        <Item href="/(student)/tests/new" label="Create Test" Icon={FaPlusCircle} />
+        <Item href="/student/tests/new" label="Create Test" Icon={FaPlusCircle} />
       ) : (
         <>
-          <Item href="/(evaluator)/evaluations/new" label="Create Evaluation" Icon={FaPlusCircle} />
-          <Item href="/(evaluator)/dashboard" label="Flagged Sheets" Icon={FaFlag} />
-          <Item href="/(evaluator)/dashboard" label="Recent Sheets" Icon={FaRegFilePdf} />
+          <Item href="/evaluator/evaluations/new" label="Create Evaluation" Icon={FaPlusCircle} />
+          <Item href="/evaluator/dashboard" label="Flagged Sheets" Icon={FaFlag} />
+          <Item href="/evaluator/dashboard" label="Recent Sheets" Icon={FaRegFilePdf} />
         </>
       )}
     </aside>

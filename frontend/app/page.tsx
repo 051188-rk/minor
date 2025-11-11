@@ -11,11 +11,11 @@ export default function Home() {
           Generate mock tests and evaluate answer sheets with Gemini-powered document understanding.
         </p>
         <div style={{ marginTop: "1rem" }}>
-          <Link href="/(auth)/login" className="button">Login</Link>
+          <Link href="/login" className="button">Login</Link>
           <span style={{ margin: "0 0.75rem" }} />
-          <Link href="/(auth)/signup-student" className="button">Student Signup</Link>
+          <Link href="/signup-student" className="button">Student Signup</Link>
           <span style={{ margin: "0 0.75rem" }} />
-          <Link href="/(auth)/signup-evaluator" className="button">Evaluator Signup</Link>
+          <Link href="/signup-evaluator" className="button">Evaluator Signup</Link>
         </div>
         <div style={{ marginTop: "1rem", color: "#14532d" }}>
           <FaCheckCircle /> Built with Next.js, Express, MongoDB, and Gemini
