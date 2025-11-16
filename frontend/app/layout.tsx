@@ -3,7 +3,7 @@ import { Poppins } from "next/font/google";
 
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["600"],
   variable: "--font-poppins"
 });
 
@@ -14,10 +14,8 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${poppins.variable} font-sans`}>
-      <body className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
-        {children}
-      </body>
+    <html lang="en" className={poppins.variable}>
+      <body style={{ fontFamily: "var(--font-poppins), system-ui, sans-serif" }}>{children}</body>
     </html>
   );
 }
